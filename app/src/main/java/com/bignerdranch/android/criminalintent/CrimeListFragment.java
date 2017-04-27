@@ -35,6 +35,7 @@ public class CrimeListFragment extends Fragment {
 
     private void upDateUI() {
         CrimeLab crimeLab = CrimeLab.getCrimeLab();
+        //重新创建太浪费资源，有就直接更新
         if (mCrimeAdapter == null) {
             mCrimeAdapter = new CrimeAdapter(crimeLab.getCrimeList());
             mRecyclerView.setAdapter(mCrimeAdapter);
@@ -106,6 +107,7 @@ public class CrimeListFragment extends Fragment {
         }
     }
 
+    //恢复时跟新
     @Override
     public void onResume() {
         super.onResume();
