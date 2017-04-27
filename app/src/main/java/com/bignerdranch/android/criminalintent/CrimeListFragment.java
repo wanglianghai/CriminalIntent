@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -30,20 +31,28 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
-    //holder 视图展示
-    public class CrimeHolder extends RecyclerView.ViewHolder{
+    //holder 视图展示 配点击事件
+    //点击 1 实现接口 2 item setOnclickListener
+    public class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView mTextView;
         private TextView mDate;
         private CheckBox mCheckBox;
         public CrimeHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             mTextView = (TextView) itemView.findViewById(R.id.list_item_title);
             mDate = (TextView) itemView.findViewById(R.id.list_item_date);
             mCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_check_box);
         }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(getActivity(), "Click", Toast.LENGTH_LONG).show();
+        }
     }
 
     //recyclerView的adapter处理一堆要集合
+    //调整员工
     public class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder>{
         private List<Crime> mCrimes;
         public CrimeAdapter(List<Crime> crimes) {
