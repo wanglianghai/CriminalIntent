@@ -21,7 +21,7 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);    //可以用父类方法
         if (fragment == null) {
-            fragment = new CrimeListFragment();
+            fragment = createFragment();
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit();

@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -48,6 +49,8 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Toast.makeText(getActivity(), "Click", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getActivity(), CriminalActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -71,7 +74,7 @@ public class CrimeListFragment extends Fragment {
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime itemCrime = mCrimes.get(position);
             holder.mCheckBox.setChecked(itemCrime.isSolved());
-            holder.mDate.setText(itemCrime.getDate().toString());
+            holder.mDate.setText(itemCrime.getDate());
             holder.mTextView.setText(itemCrime.getTitle());
         }
 
