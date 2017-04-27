@@ -15,9 +15,9 @@ public class CrimeLab {
     private static CrimeLab sCrimeLab;
     private List<Crime> mCrimeList;
 
-    public static CrimeLab getCrimeLab(Context context) {
+    public static CrimeLab getCrimeLab() {
         if (sCrimeLab == null) {
-            sCrimeLab = new CrimeLab(context);
+            sCrimeLab = new CrimeLab();
         }
         return sCrimeLab;
     }
@@ -36,7 +36,7 @@ public class CrimeLab {
     }
 
     //context有什么用？
-    private CrimeLab(Context context) {
+    private CrimeLab() {
         mCrimeList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             Crime c = new Crime();

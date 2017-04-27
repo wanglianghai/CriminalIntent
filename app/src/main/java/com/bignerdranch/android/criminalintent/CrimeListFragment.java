@@ -25,7 +25,7 @@ public class CrimeListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_recycler_view);
-        CrimeLab crimeLab = CrimeLab.getCrimeLab(getActivity());
+        CrimeLab crimeLab = CrimeLab.getCrimeLab();
         CrimeAdapter crimeAdapter = new CrimeAdapter(crimeLab.getCrimeList());
         recyclerView.setAdapter(crimeAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -38,6 +38,7 @@ public class CrimeListFragment extends Fragment {
         private TextView mTextView;
         private TextView mDate;
         private CheckBox mCheckBox;
+        private Crime mCrime;
         public CrimeHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
@@ -46,10 +47,16 @@ public class CrimeListFragment extends Fragment {
             mCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_check_box);
         }
 
+        public void bind(Crime crime) {
+            mCrime = crime;
+            mTextView.setText(crime.getTitle());
+            mDate.setText(crime.getDate());
+            mCheckBox.setChecked(crime.isSolved());
+        }
         @Override
         public void onClick(View v) {
             Toast.makeText(getActivity(), "Click", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(getActivity(), CriminalActivity.class);
+            Intent intent = CriminalActivity.newIntent(getActivity(), mCrime.getId());
             startActivity(intent);
         }
     }
@@ -73,9 +80,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime itemCrime = mCrimes.get(position);
-            holder.mCheckBox.setChecked(itemCrime.isSolved());
-            holder.mDate.setText(itemCrime.getDate());
-            holder.mTextView.setText(itemCrime.getTitle());
+            holder.bind(itemCrime);
         }
 
         @Override

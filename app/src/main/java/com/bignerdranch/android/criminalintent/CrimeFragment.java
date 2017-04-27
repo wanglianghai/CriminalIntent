@@ -13,6 +13,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 /**
  * Created by Administrator on 2017/4/26/026.
  */
@@ -25,7 +27,9 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); //关闭时保存下来，重开时用保存的
-        mCrime = new Crime();
+        UUID uuid = (UUID) getActivity().getIntent().getSerializableExtra(CriminalActivity.EXTRA_CRIME_ID);
+        //一串中（特定的）
+        mCrime = CrimeLab.getCrimeLab().getCrime(uuid);
     }
 
     @Nullable
@@ -36,6 +40,7 @@ public class CrimeFragment extends Fragment {
         mDateButton.setText(mCrime.getDate());
 
         mSolveCheckBox = (CheckBox) view.findViewById(R.id.crime_solve);
+        mSolveCheckBox.setChecked(mCrime.isSolved());
         mSolveCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -44,6 +49,7 @@ public class CrimeFragment extends Fragment {
         });
 
         mTitleField = (EditText) view.findViewById(R.id.crime_title);
+        mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
