@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,16 +21,26 @@ import java.util.List;
  */
 
 public class CrimeListFragment extends Fragment {
+    RecyclerView mRecyclerView;
+    CrimeAdapter mCrimeAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.fragment_recycler_view);
-        CrimeLab crimeLab = CrimeLab.getCrimeLab();
-        CrimeAdapter crimeAdapter = new CrimeAdapter(crimeLab.getCrimeList());
-        recyclerView.setAdapter(crimeAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_recycler_view);
+        upDateUI();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
+    }
+
+    private void upDateUI() {
+        CrimeLab crimeLab = CrimeLab.getCrimeLab();
+        if (mCrimeAdapter == null) {
+            mCrimeAdapter = new CrimeAdapter(crimeLab.getCrimeList());
+            mRecyclerView.setAdapter(mCrimeAdapter);
+        } else {
+            mCrimeAdapter.notifyDataSetChanged();
+        }
     }
 
     //holder 视图展示 配点击事件
@@ -47,11 +58,17 @@ public class CrimeListFragment extends Fragment {
             mCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_check_box);
         }
 
-        public void bind(Crime crime) {
+        public void bind(final Crime crime) {
             mCrime = crime;
             mTextView.setText(crime.getTitle());
             mDate.setText(crime.getDate());
             mCheckBox.setChecked(crime.isSolved());
+            mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mCrime.setSolved(isChecked);
+                }
+            });
         }
         @Override
         public void onClick(View v) {
@@ -87,5 +104,11 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        upDateUI();
     }
 }
