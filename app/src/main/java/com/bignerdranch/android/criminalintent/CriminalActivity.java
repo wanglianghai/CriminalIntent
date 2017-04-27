@@ -11,7 +11,7 @@ import java.util.UUID;
 
 //newIntent  UUID  URL区分
 public class CriminalActivity extends SingleFragmentActivity {
-    public static final String EXTRA_CRIME_ID = "criminalIntent.crime_id";
+    private static final String EXTRA_CRIME_ID = "criminalIntent.crime_id";
     public static Intent newIntent(Context context, UUID crimeId) {
         Intent intent = new Intent(context, CriminalActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
@@ -19,7 +19,8 @@ public class CriminalActivity extends SingleFragmentActivity {
     }
     @Override
     public Fragment createFragment() {
-        return new CrimeFragment();
+        UUID uuid = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+        return CrimeFragment.newInstance(uuid);
     }  //支持fragment的activity
 
 }

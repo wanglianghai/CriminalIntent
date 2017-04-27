@@ -20,14 +20,22 @@ import java.util.UUID;
  */
 //一个需要的fragment
 public class CrimeFragment extends Fragment {
+    private static final String ARG_CRIME_ID = "crime_id";
     private Crime mCrime;   //crime放这fragment中在这里设置要用crime的对象
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolveCheckBox;
+    public static CrimeFragment newInstance(UUID uuid) {
+        Bundle arg = new Bundle();
+        arg.putSerializable(ARG_CRIME_ID, uuid);
+        CrimeFragment crimeFragment = new CrimeFragment();
+        crimeFragment.setArguments(arg);
+        return crimeFragment;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); //关闭时保存下来，重开时用保存的
-        UUID uuid = (UUID) getActivity().getIntent().getSerializableExtra(CriminalActivity.EXTRA_CRIME_ID);
+        UUID uuid = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         //一串中（特定的）
         mCrime = CrimeLab.getCrimeLab().getCrime(uuid);
     }
@@ -68,4 +76,5 @@ public class CrimeFragment extends Fragment {
         });
         return view;
     }
+
 }
