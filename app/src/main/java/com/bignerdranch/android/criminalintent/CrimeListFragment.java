@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -32,9 +33,13 @@ public class CrimeListFragment extends Fragment {
     //holder 视图展示
     public class CrimeHolder extends RecyclerView.ViewHolder{
         private TextView mTextView;
+        private TextView mDate;
+        private CheckBox mCheckBox;
         public CrimeHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView;
+            mTextView = (TextView) itemView.findViewById(R.id.list_item_title);
+            mDate = (TextView) itemView.findViewById(R.id.list_item_date);
+            mCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_check_box);
         }
     }
 
@@ -48,13 +53,16 @@ public class CrimeListFragment extends Fragment {
         @Override
         public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            //item的layout
+            View view = inflater.inflate(R.layout.crime_list_item, parent, false);
             return new CrimeHolder(view);
         }
 
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime itemCrime = mCrimes.get(position);
+            holder.mCheckBox.setChecked(itemCrime.isSolved());
+            holder.mDate.setText(itemCrime.getDate().toString());
             holder.mTextView.setText(itemCrime.getTitle());
         }
 

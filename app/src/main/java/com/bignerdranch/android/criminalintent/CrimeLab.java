@@ -41,7 +41,7 @@ public class CrimeLab {
         for (int i = 0; i < 100; i++) {
             Crime c = new Crime();
             c.setTitle("Crime" + i);
-            c.setSolved(i % 2 == 0);    //?改变checkBox
+            c.setSolved(i % 2 == 0);    //setChecked改变checkBox
             mCrimeList.add(c);
         }
     }
