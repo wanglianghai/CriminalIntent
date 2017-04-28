@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,14 +25,19 @@ import java.util.List;
  */
 
 public class CrimeListFragment extends Fragment {
-    RecyclerView mRecyclerView;
-    CrimeAdapter mCrimeAdapter;
+    private RecyclerView mRecyclerView;
+    private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
+    private CrimeAdapter mCrimeAdapter;
+    private boolean mBooleanClick;
     int mPosition;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        Intent intent = getActivity().getIntent();
+        if (intent.getSerializableExtra(CrimeListFragment.SAVED_SUBTITLE_VISIBLE) != null) {
+            mBooleanClick = (boolean) intent.getSerializableExtra(CrimeListFragment.SAVED_SUBTITLE_VISIBLE);
+        }
     }
 
     @Nullable
@@ -41,7 +47,16 @@ public class CrimeListFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_recycler_view);
         upDateUI();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (savedInstanceState != null) {
+            mBooleanClick = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
+        }
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(SAVED_SUBTITLE_VISIBLE, mBooleanClick);
     }
 
     private void upDateUI() {
@@ -53,6 +68,7 @@ public class CrimeListFragment extends Fragment {
         } else {
             mCrimeAdapter.notifyItemChanged(mPosition);
         }
+        upDateSubtitle();
     }
 
     //holder 视图展示 配点击事件
@@ -86,7 +102,7 @@ public class CrimeListFragment extends Fragment {
         public void onClick(View v) {
             mPosition = mRecyclerView.getChildAdapterPosition(v);
             Toast.makeText(getActivity(), "Click", Toast.LENGTH_LONG).show();
-            Intent intent = CriminalActivity.newIntent(getActivity(), mCrime.getId());
+            Intent intent = CriminalActivity.newIntent(getActivity(), mCrime.getId(), mBooleanClick);
             startActivity(intent);
         }
     }
@@ -130,6 +146,12 @@ public class CrimeListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_crime_list, menu);
+        MenuItem subtitle = menu.findItem(R.id.menu_item_subtitle);
+        if (mBooleanClick) {
+            subtitle.setTitle(R.string.hide_subtitle);
+        } else {
+            subtitle.setTitle(R.string.show_subtitle);
+        }
     }
 
     @Override
@@ -139,11 +161,26 @@ public class CrimeListFragment extends Fragment {
                 Crime crime = new Crime();
                 CrimeLab  crimeLab = CrimeLab.getCrimeLab();
                 crimeLab.addCrime(crime);
-                Intent intent = CriminalActivity.newIntent(getActivity(), crime.getId());
+                Intent intent = CriminalActivity.newIntent(getActivity(), crime.getId(), mBooleanClick);
                 startActivity(intent);
+                return true;
+            case R.id.menu_item_subtitle:
+                mBooleanClick = !mBooleanClick;
+                getActivity().invalidateOptionsMenu();
+                upDateSubtitle();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void upDateSubtitle() {
+        int  crimeLabNum = CrimeLab.getCrimeLab().getCrimeList().size();
+        String subtitle = "宝贝数量" + crimeLabNum;
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if (!mBooleanClick) {
+            subtitle = null;
+        }
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 }

@@ -12,14 +12,11 @@ import android.support.v7.app.AppCompatActivity;
  */
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
-    private String mString;
-    public abstract String setString();
     //Fragment 多态
     public abstract Fragment createFragment();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(setString());
         setContentView(R.layout.activity_fragment);
 
         FragmentManager fm = getSupportFragmentManager();
