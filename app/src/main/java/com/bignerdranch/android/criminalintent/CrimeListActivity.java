@@ -16,7 +16,7 @@ import android.view.Window;
 //在manifest中配置
 //大框架搭好后运行下
 public class CrimeListActivity extends SingleFragmentActivity {
-    public static final String EXTRA_SUBTITLE = "crimeList.subtitle";
+    private static final String EXTRA_SUBTITLE = "crimeList.subtitle";
 
     public static Intent newIntent(Context context, boolean subtitle) {
         Intent intent = new Intent(context, CrimeListActivity.class);
@@ -25,6 +25,10 @@ public class CrimeListActivity extends SingleFragmentActivity {
     }
     @Override
     public Fragment createFragment() {
-        return new CrimeListFragment();
+        boolean click = false;
+        if (getIntent().getSerializableExtra(EXTRA_SUBTITLE) != null) {
+            click = (boolean) getIntent().getSerializableExtra(EXTRA_SUBTITLE);
+        }
+        return CrimeListFragment.newInstance(click);
     }
 }

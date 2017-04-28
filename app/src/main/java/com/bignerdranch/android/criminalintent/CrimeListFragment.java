@@ -25,19 +25,25 @@ import java.util.List;
  */
 
 public class CrimeListFragment extends Fragment {
+    private static final String AGR_CRIME_SUBTITLE = "crime_subtitle";
     private RecyclerView mRecyclerView;
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
     private CrimeAdapter mCrimeAdapter;
     private boolean mBooleanClick;
     int mPosition;
 
+    public static CrimeListFragment newInstance(boolean booleanClick) {
+        Bundle arg = new Bundle();
+        arg.putSerializable(AGR_CRIME_SUBTITLE, booleanClick);
+
+        CrimeListFragment crimeListFragment = new CrimeListFragment();
+        crimeListFragment.setArguments(arg);
+        return crimeListFragment;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getActivity().getIntent();
-        if (intent.getSerializableExtra(CrimeListFragment.SAVED_SUBTITLE_VISIBLE) != null) {
-            mBooleanClick = (boolean) intent.getSerializableExtra(CrimeListFragment.SAVED_SUBTITLE_VISIBLE);
-        }
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -69,6 +75,7 @@ public class CrimeListFragment extends Fragment {
             mCrimeAdapter.notifyItemChanged(mPosition);
         }
         upDateSubtitle();
+        mBooleanClick = (boolean) getArguments().getSerializable(AGR_CRIME_SUBTITLE);
     }
 
     //holder 视图展示 配点击事件
