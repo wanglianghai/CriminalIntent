@@ -17,6 +17,12 @@ public class CriminalActivity extends SingleFragmentActivity {
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
         return intent;
     }
+
+    @Override
+    public String setString() {
+        return "Criminal detail";
+    }
+
     @Override
     public Fragment createFragment() {
         UUID uuid = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);

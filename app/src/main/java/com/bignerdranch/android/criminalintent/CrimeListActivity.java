@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.Window;
 
 /**
  * Created by Administrator on 2017/4/27/027.
@@ -13,6 +14,11 @@ import android.support.v4.app.FragmentManager;
 //在manifest中配置
 //大框架搭好后运行下
 public class CrimeListActivity extends SingleFragmentActivity {
+
+    @Override
+    public String setString() {
+        return "Crime List";
+    }
 
     @Override
     public Fragment createFragment() {

@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ public class CrimeFragment extends Fragment {
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolveCheckBox;
+    private Button mFinishButton;
     public static CrimeFragment newInstance(UUID uuid) {
         Bundle arg = new Bundle();
         arg.putSerializable(ARG_CRIME_ID, uuid);
@@ -53,6 +55,15 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
+            }
+        });
+
+        mFinishButton = (Button) view.findViewById(R.id.crime_finish);
+        mFinishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CrimeListActivity.class);
+                startActivity(intent);
             }
         });
 
