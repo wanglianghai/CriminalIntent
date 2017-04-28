@@ -27,6 +27,7 @@ public class CrimeFragment extends Fragment {
     private Button mDateButton;
     private CheckBox mSolveCheckBox;
     private Button mFinishButton;
+    private Button mButtonDelete;
     public static CrimeFragment newInstance(UUID uuid) {
         Bundle arg = new Bundle();
         arg.putSerializable(ARG_CRIME_ID, uuid);
@@ -59,14 +60,23 @@ public class CrimeFragment extends Fragment {
         });
 
         mFinishButton = (Button) view.findViewById(R.id.crime_finish);
+
         mFinishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CrimeListActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
+        mButtonDelete = (Button) view.findViewById(R.id.crime_delete);
+        mButtonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CrimeLab crimeLab = CrimeLab.getCrimeLab();
+                crimeLab.delete(mCrime);
+                finish();
+            }
+        });
         mTitleField = (EditText) view.findViewById(R.id.crime_title);
         mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
@@ -86,6 +96,11 @@ public class CrimeFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void finish() {
+        Intent intent = CrimeListActivity.newIntent(getActivity(), )
+        startActivity(intent);
     }
 
 }
