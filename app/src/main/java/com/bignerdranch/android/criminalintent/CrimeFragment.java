@@ -22,15 +22,17 @@ import java.util.UUID;
 //一个需要的fragment
 public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
+    private static final String ARG_CRIME_SUBTITLE = "crime_subtitle";
     private Crime mCrime;   //crime放这fragment中在这里设置要用crime的对象
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolveCheckBox;
     private Button mFinishButton;
     private Button mButtonDelete;
-    public static CrimeFragment newInstance(UUID uuid) {
+    public static CrimeFragment newInstance(UUID uuid, boolean click) {
         Bundle arg = new Bundle();
         arg.putSerializable(ARG_CRIME_ID, uuid);
+        arg.putSerializable(ARG_CRIME_SUBTITLE, click);
         CrimeFragment crimeFragment = new CrimeFragment();
         crimeFragment.setArguments(arg);
         return crimeFragment;
@@ -99,7 +101,8 @@ public class CrimeFragment extends Fragment {
     }
 
     private void finish() {
-        Intent intent = CrimeListActivity.newIntent(getActivity(), )
+        boolean click = (boolean) getArguments().getSerializable(ARG_CRIME_SUBTITLE);
+        Intent intent = CrimeListActivity.newIntent(getActivity(), click);
         startActivity(intent);
     }
 

@@ -24,7 +24,8 @@ public class CriminalActivity extends SingleFragmentActivity {
     @Override
     public Fragment createFragment() {
         UUID uuid = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
-        return CrimeFragment.newInstance(uuid);
+        boolean click = (boolean) getIntent().getSerializableExtra(EXTRA_SHOW_SUBTITLE);
+        return CrimeFragment.newInstance(uuid, click);
     }  //支持fragment的activity
 
     @Nullable
