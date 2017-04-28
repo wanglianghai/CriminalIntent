@@ -29,8 +29,10 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
     private CrimeAdapter mCrimeAdapter;
+    private TextView mEmptyTextView;
     private boolean mBooleanClick;
     int mPosition;
+    private CrimeLab mCrimeLab;
 
     public static CrimeListFragment newInstance(boolean booleanClick) {
         Bundle arg = new Bundle();
@@ -44,13 +46,18 @@ public class CrimeListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mCrimeLab = CrimeLab.getCrimeLab();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
+        mEmptyTextView = (TextView) view.findViewById(R.id.empty_crime);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_recycler_view);
+        if (mCrimeLab.getCrimeList().size() > 0) {
+            mEmptyTextView.setVisibility(View.GONE);
+        }
         upDateUI();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (savedInstanceState != null) {
@@ -66,10 +73,9 @@ public class CrimeListFragment extends Fragment {
     }
 
     private void upDateUI() {
-        CrimeLab crimeLab = CrimeLab.getCrimeLab();
         //重新创建太浪费资源，有就直接更新
         if (mCrimeAdapter == null) {
-            mCrimeAdapter = new CrimeAdapter(crimeLab.getCrimeList());
+            mCrimeAdapter = new CrimeAdapter(mCrimeLab.getCrimeList());
             mRecyclerView.setAdapter(mCrimeAdapter);
         } else {
             mCrimeAdapter.notifyItemChanged(mPosition);
@@ -166,8 +172,7 @@ public class CrimeListFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_item_new_crime:
                 Crime crime = new Crime();
-                CrimeLab  crimeLab = CrimeLab.getCrimeLab();
-                crimeLab.addCrime(crime);
+                mCrimeLab.addCrime(crime);
                 Intent intent = CriminalActivity.newIntent(getActivity(), crime.getId(), mBooleanClick);
                 startActivity(intent);
                 return true;
@@ -182,7 +187,7 @@ public class CrimeListFragment extends Fragment {
     }
 
     private void upDateSubtitle() {
-        int  crimeLabNum = CrimeLab.getCrimeLab().getCrimeList().size();
+        int  crimeLabNum = mCrimeLab.getCrimeList().size();
         String subtitle = "宝贝数量" + crimeLabNum;
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (!mBooleanClick) {
