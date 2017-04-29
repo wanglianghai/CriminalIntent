@@ -34,6 +34,7 @@ public class CrimeFragment extends Fragment {
     private CheckBox mSolveCheckBox;
     private Button mFinishButton;
     private Button mButtonDelete;
+    private EditText mEditTextDetail;
     public static CrimeFragment newInstance(UUID uuid, boolean click) {
         Bundle arg = new Bundle();
         arg.putSerializable(ARG_CRIME_ID, uuid);
@@ -54,6 +55,24 @@ public class CrimeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime, container, false);
+        mEditTextDetail = (EditText) view.findViewById(R.id.crime_editor_detail);
+        mEditTextDetail.setText(mCrime.getContent());
+        mEditTextDetail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mCrime.setContent(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         mDateButton = (Button) view.findViewById(R.id.crime_date);
         updateDateButtonText();
         mDateButton.setOnClickListener(new View.OnClickListener() {

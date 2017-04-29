@@ -14,6 +14,17 @@ public class Crime {
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
+    private String mContent;
+
+    public String getContent() {
+        return mContent;
+    }
+
+    public void setContent(String content) {
+
+        mContent = content;
+    }
+
     public Crime() {
         mId = UUID.randomUUID();
         mDate = new Date();
