@@ -58,6 +58,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                //直接用this找不到fragment
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_CODE);
                 dialog.show(getFragmentManager(), TAG_CRIME_DATE);
             }
