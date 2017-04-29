@@ -102,7 +102,7 @@ public class CrimeListFragment extends Fragment {
         public void bind(final Crime crime) {
             mCrime = crime;
             mTextView.setText(crime.getTitle());
-            mDate.setText(crime.getDate());
+            mDate.setText(crime.getDateString());
             mCheckBox.setChecked(crime.isSolved());
             mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

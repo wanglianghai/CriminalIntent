@@ -52,11 +52,11 @@ public class CrimeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime, container, false);
         mDateButton = (Button) view.findViewById(R.id.crime_date);
-        mDateButton.setText(mCrime.getDate());
+        mDateButton.setText(mCrime.getDateString());
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerFragment dialog = new DatePickerFragment();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                 dialog.show(getFragmentManager(), TAG_CRIME_DATE);
             }
         });

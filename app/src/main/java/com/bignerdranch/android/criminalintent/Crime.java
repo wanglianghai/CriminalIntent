@@ -12,12 +12,11 @@ import java.util.UUID;
 public class Crime {
     private UUID mId;
     private String mTitle;
-    private String mDate;
+    private Date mDate;
     private boolean mSolved;
     public Crime() {
         mId = UUID.randomUUID();
-        Date ate = new Date();
-        mDate = (String) DateFormat.format("yyyy年MM月dd日",ate);
+        mDate = new Date();
         //用Id便于区分不同的
     }
 
@@ -33,7 +32,11 @@ public class Crime {
         mTitle = title;
     }
 
-    public String getDate() {
+    public String getDateString() {
+        return (String) DateFormat.format("yyyy年MM月dd日",mDate);
+    }
+
+    public Date getDate() {
         return mDate;
     }
 
