@@ -44,7 +44,11 @@ public class Crime {
     }
 
     public String getDateString() {
-        return (String) DateFormat.format("yyyy年MM月dd日",mDate);
+        return (String) DateFormat.format("入宝时间：yyyy年MM月dd日",mDate);
+    }
+
+    public String getTimeString() {
+        return (String) DateFormat.format("hh:mm", mDate);
     }
 
     public Date getDate() {

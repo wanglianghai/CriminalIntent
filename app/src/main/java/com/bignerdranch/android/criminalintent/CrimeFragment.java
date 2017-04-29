@@ -27,7 +27,9 @@ public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String ARG_CRIME_SUBTITLE = "crime_subtitle";
     private static final String TAG_CRIME_DATE = "Dialog_date";
+    private static final String TAG_CRIME_TIME = "DialogTime";
     private static final int REQUEST_CODE = 0;
+    private static final int REQUEST_TIME = 1;
     private Crime mCrime;   //crime放这fragment中在这里设置要用crime的对象
     private EditText mTitleField;
     private Button mDateButton;
@@ -35,6 +37,7 @@ public class CrimeFragment extends Fragment {
     private Button mFinishButton;
     private Button mButtonDelete;
     private EditText mEditTextDetail;
+    private Button mTimeEditorButton;
     public static CrimeFragment newInstance(UUID uuid, boolean click) {
         Bundle arg = new Bundle();
         arg.putSerializable(ARG_CRIME_ID, uuid);
@@ -55,6 +58,16 @@ public class CrimeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime, container, false);
+        mTimeEditorButton = (Button) view.findViewById(R.id.crime_select_time);
+        mTimeEditorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getFragmentManager();
+                TimePickerFragment timePicker = TimePickerFragment.getInstance(mCrime.getDate());
+                timePicker.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
+                timePicker.show(manager, TAG_CRIME_TIME);
+            }
+        });
         mEditTextDetail = (EditText) view.findViewById(R.id.crime_editor_detail);
         mEditTextDetail.setText(mCrime.getContent());
         mEditTextDetail.addTextChangedListener(new TextWatcher() {
@@ -143,6 +156,12 @@ public class CrimeFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
             updateDateButtonText();
+        }
+
+        if (requestCode == REQUEST_TIME) {
+            Date date = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
+            mCrime.setDate(date);
+            mTimeEditorButton.setText(mCrime.getTimeString());
         }
     }
 
