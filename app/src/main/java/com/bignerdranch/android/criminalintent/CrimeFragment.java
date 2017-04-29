@@ -25,6 +25,7 @@ public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String ARG_CRIME_SUBTITLE = "crime_subtitle";
     private static final String TAG_CRIME_DATE = "Dialog_date";
+    private static final int REQUEST_CODE = 0;
     private Crime mCrime;   //crime放这fragment中在这里设置要用crime的对象
     private EditText mTitleField;
     private Button mDateButton;
@@ -57,6 +58,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_CODE);
                 dialog.show(getFragmentManager(), TAG_CRIME_DATE);
             }
         });
