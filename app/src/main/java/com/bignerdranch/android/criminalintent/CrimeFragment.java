@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String ARG_CRIME_SUBTITLE = "crime_subtitle";
+    private static final String TAG_CRIME_DATE = "Dialog_date";
     private Crime mCrime;   //crime放这fragment中在这里设置要用crime的对象
     private EditText mTitleField;
     private Button mDateButton;
@@ -51,6 +53,13 @@ public class CrimeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_crime, container, false);
         mDateButton = (Button) view.findViewById(R.id.crime_date);
         mDateButton.setText(mCrime.getDate());
+        mDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment dialog = new DatePickerFragment();
+                dialog.show(getFragmentManager(), TAG_CRIME_DATE);
+            }
+        });
 
         mSolveCheckBox = (CheckBox) view.findViewById(R.id.crime_solve);
         mSolveCheckBox.setChecked(mCrime.isSolved());
