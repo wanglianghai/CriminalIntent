@@ -1,4 +1,4 @@
-package database.CrimeDbSchema;
+package com.bignerdranch.android.criminalintent.database.CrimeDbSchema;
 
 /**
  * Created by Administrator on 2017/4/30/030.

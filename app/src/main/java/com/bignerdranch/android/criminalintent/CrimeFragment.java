@@ -51,7 +51,7 @@ public class CrimeFragment extends Fragment {
         super.onCreate(savedInstanceState); //关闭时保存下来，重开时用保存的
         UUID uuid = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         //一串中（特定的）
-        mCrime = CrimeLab.getCrimeLab().getCrime(uuid);
+        mCrime = CrimeLab.getCrimeLab(getContext()).getCrime(uuid);
     }
 
     @Nullable
@@ -120,7 +120,7 @@ public class CrimeFragment extends Fragment {
         mButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CrimeLab crimeLab = CrimeLab.getCrimeLab();
+                CrimeLab crimeLab = CrimeLab.getCrimeLab(getContext());
                 crimeLab.delete(mCrime);
                 finish();
             }
