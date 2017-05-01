@@ -15,7 +15,8 @@ import android.view.Window;
 //一个xml的布局可以被许多activity使用
 //在manifest中配置
 //大框架搭好后运行下
-public class CrimeListActivity extends SingleFragmentActivity {
+public class CrimeListActivity extends SingleFragmentActivity
+        implements CrimeListFragment.Callbacks {
     private static final String EXTRA_SUBTITLE = "crimeList.subtitle";
 
     public static Intent newIntent(Context context, boolean subtitle) {
@@ -38,5 +39,19 @@ public class CrimeListActivity extends SingleFragmentActivity {
             click = (boolean) getIntent().getSerializableExtra(EXTRA_SUBTITLE);
         }
         return CrimeListFragment.newInstance(click);
+    }
+
+    @Override
+    public void onCrimeSelected(Crime crime) {
+        if (findViewById(R.id.detail_fragment_container) == null) {
+            Intent i = CriminalActivity.newIntent(this, crime.getId(), crime.isSolved());
+            startActivity(i);
+        } else {
+            Fragment newDetail = CrimeFragment.newInstance(crime.getId(), crime.isSolved());
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.detail_fragment_container, newDetail)
+                    .commit();
+        }
     }
 }

@@ -3,13 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp">
     <CheckBox
         android:id="@+id/list_item_check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"/>
-    <!-- padding 内边距-->
+    <!-- padding 自己和框里其他东西 内边距-->
     <TextView
         android:id="@+id/list_item_title"
         android:layout_width="match_parent"
@@ -22,6 +23,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/list_item_title"
-        android:layout_toLeftOf="@id/list_item_check_box"
-        tools:text="date"/>
+        tools:text="date"
+        style="?android:listSeparatorTextViewStyle"/>
 </RelativeLayout>

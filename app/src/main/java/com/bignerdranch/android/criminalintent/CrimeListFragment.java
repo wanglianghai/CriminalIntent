@@ -1,5 +1,7 @@
 package com.bignerdranch.android.criminalintent;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -33,6 +35,11 @@ public class CrimeListFragment extends Fragment {
     private boolean mBooleanClick;
     int mPosition;
     private CrimeLab mCrimeLab;
+    private Callbacks mCallbacks;
+
+    public interface Callbacks{
+        void onCrimeSelected(Crime crime);
+    }
 
     public static CrimeListFragment newInstance(boolean booleanClick) {
         Bundle arg = new Bundle();
@@ -42,6 +49,13 @@ public class CrimeListFragment extends Fragment {
         crimeListFragment.setArguments(arg);
         return crimeListFragment;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,8 +131,7 @@ public class CrimeListFragment extends Fragment {
         public void onClick(View v) {
             mPosition = mRecyclerView.getChildAdapterPosition(v);
             Toast.makeText(getActivity(), "Click", Toast.LENGTH_LONG).show();
-            Intent intent = CriminalActivity.newIntent(getActivity(), mCrime.getId(), mBooleanClick);
-            startActivity(intent);
+            leapTo(mCrime);
         }
     }
 
@@ -179,8 +192,8 @@ public class CrimeListFragment extends Fragment {
             case R.id.menu_item_new_crime:
                 Crime crime = new Crime();
                 mCrimeLab.addCrime(crime);
-                Intent intent = CriminalActivity.newIntent(getActivity(), crime.getId(), mBooleanClick);
-                startActivity(intent);
+                upDateUI();
+                leapTo(crime);
                 return true;
             case R.id.menu_item_subtitle:
                 mBooleanClick = !mBooleanClick;
@@ -190,6 +203,16 @@ public class CrimeListFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void leapTo(Crime crime) {
+        mCallbacks.onCrimeSelected(crime);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
     }
 
     private void upDateSubtitle() {
