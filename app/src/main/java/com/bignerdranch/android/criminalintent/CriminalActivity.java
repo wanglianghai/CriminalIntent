@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentManager;
 import java.util.UUID;
 
 //newIntent  UUID  URL区分
-public class CriminalActivity extends SingleFragmentActivity {
+public class CriminalActivity extends SingleFragmentActivity implements CrimeFragment.Callbacks {
     private static final String EXTRA_CRIME_ID = "criminalIntent.crime_id";
     private static final String EXTRA_SHOW_SUBTITLE = "criminalIntent.crime_subtitle";
     public static Intent newIntent(Context context, UUID crimeId, boolean subtitle) {
@@ -34,5 +34,10 @@ public class CriminalActivity extends SingleFragmentActivity {
         boolean subtitle = (boolean) getIntent().getSerializableExtra(EXTRA_SHOW_SUBTITLE);
         Intent intent = CrimeListActivity.newIntent(this, subtitle);
         return intent;
+    }
+
+    @Override
+    public void onCrimeUpdate() {
+
     }
 }

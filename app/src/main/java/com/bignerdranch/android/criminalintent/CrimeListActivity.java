@@ -50,7 +50,7 @@ public class CrimeListActivity extends SingleFragmentActivity
             Fragment newDetail = CrimeFragment.newInstance(crime.getId(), crime.isSolved());
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.detail_fragment_container, newDetail)
+                    .replace(R.id.detail_fragment_container, newDetail)
                     .commit();
         }
     }
