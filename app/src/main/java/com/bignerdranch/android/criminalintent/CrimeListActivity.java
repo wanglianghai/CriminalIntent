@@ -16,7 +16,7 @@ import android.view.Window;
 //在manifest中配置
 //大框架搭好后运行下
 public class CrimeListActivity extends SingleFragmentActivity
-        implements CrimeListFragment.Callbacks {
+        implements CrimeListFragment.Callbacks, CrimeFragment.Callbacks  {
     private static final String EXTRA_SUBTITLE = "crimeList.subtitle";
 
     public static Intent newIntent(Context context, boolean subtitle) {
@@ -53,5 +53,11 @@ public class CrimeListActivity extends SingleFragmentActivity
                     .add(R.id.detail_fragment_container, newDetail)
                     .commit();
         }
+    }
+
+    @Override
+    public void onCrimeUpdate() {
+        CrimeListFragment listFragment = (CrimeListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        listFragment.upDateUI();
     }
 }

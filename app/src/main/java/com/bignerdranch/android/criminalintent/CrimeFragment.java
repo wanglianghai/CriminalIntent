@@ -1,6 +1,7 @@
 package com.bignerdranch.android.criminalintent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,6 +39,10 @@ public class CrimeFragment extends Fragment {
     private Button mButtonDelete;
     private EditText mEditTextDetail;
     private Button mTimeEditorButton;
+    private Callbacks mCallbacks;
+    public interface Callbacks{
+        void onCrimeUpdate();
+    }
     public static CrimeFragment newInstance(UUID uuid, boolean click) {
         Bundle arg = new Bundle();
         arg.putSerializable(ARG_CRIME_ID, uuid);
@@ -46,6 +51,13 @@ public class CrimeFragment extends Fragment {
         crimeFragment.setArguments(arg);
         return crimeFragment;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); //关闭时保存下来，重开时用保存的
@@ -104,6 +116,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
+                updateCrime();
             }
         });
 
@@ -136,6 +149,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mCrime.setTitle(s.toString());
+                updateCrime();
             }
 
             @Override
@@ -161,6 +175,7 @@ public class CrimeFragment extends Fragment {
         if (requestCode == REQUEST_CODE) {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
+            updateCrime();
             updateDateButtonText();
         }
 
@@ -169,6 +184,17 @@ public class CrimeFragment extends Fragment {
             mCrime.setDate(date);
             mTimeEditorButton.setText(mCrime.getTimeString());
         }
+    }
+
+    private void updateCrime() {
+        CrimeLab.getCrimeLab(getActivity()).upDate(mCrime);
+        mCallbacks.onCrimeUpdate();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
     }
 
     private void updateDateButtonText() {

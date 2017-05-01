@@ -26,7 +26,7 @@ import java.util.List;
  * Created by Administrator on 2017/4/27/027.
  */
 
-public class CrimeListFragment extends Fragment {
+public class CrimeListFragment extends Fragment{
     private static final String AGR_CRIME_SUBTITLE = "crime_subtitle";
     private RecyclerView mRecyclerView;
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
@@ -86,7 +86,7 @@ public class CrimeListFragment extends Fragment {
         outState.putSerializable(SAVED_SUBTITLE_VISIBLE, mBooleanClick);
     }
 
-    private void upDateUI() {
+    public void upDateUI() {
         //重新创建太浪费资源，有就直接更新
         if (mCrimeAdapter == null) {
             mCrimeAdapter = new CrimeAdapter(mCrimeLab.getCrimeList());
