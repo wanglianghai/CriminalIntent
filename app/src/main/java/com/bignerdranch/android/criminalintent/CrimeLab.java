@@ -2,8 +2,10 @@ package com.bignerdranch.android.criminalintent;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.CrimeCursorWrapper;
 import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.CrimeDbSchema;
 import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.CrimeDbSchema.CrimeTable;
 import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.TreasureBaseHelper;
@@ -29,14 +31,40 @@ public class CrimeLab {
     }
 
     public List<Crime> getCrimeList() {
-        return new ArrayList<>();
+        List<Crime> crimes = new ArrayList<>();
+
+        CrimeCursorWrapper cursor = queryCrimes(null, null);
+        try {
+            cursor.moveToFirst();
+            //在最后一个后面返回true
+            while (!cursor.isAfterLast()) {
+                crimes.add(cursor.getCrime());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return crimes;
     }
 
     public Crime getCrime(UUID uuid) {
-        return null;
+        CrimeCursorWrapper cursor = queryCrimes(CrimeTable.Cols.UUID + " =? ",
+                new String[]{uuid.toString()});
+
+        try {
+            if (cursor.getCount() == 0) {
+            return null;
+        }
+
+        cursor.moveToFirst();
+        return cursor.getCrime();
+        } finally {
+            cursor.close();
+        }
     }
 
-    //context有什么用？
+    //context创建SQLite，需要对应的环境
     private CrimeLab(Context context) {
         mDatabase = new TreasureBaseHelper(context.getApplicationContext()).getWritableDatabase();
 
@@ -70,4 +98,17 @@ public class CrimeLab {
         values.put(CrimeTable.Cols.TITLE, crime.getTitle());
         return values;
     }
+
+    private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(CrimeTable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null);
+
+        return new CrimeCursorWrapper(cursor);
+    }
+
 }

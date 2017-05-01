@@ -78,6 +78,7 @@ public class CrimeListFragment extends Fragment {
             mCrimeAdapter = new CrimeAdapter(mCrimeLab.getCrimeList());
             mRecyclerView.setAdapter(mCrimeAdapter);
         } else {
+            mCrimeAdapter.setCrimes(mCrimeLab.getCrimeList());
             mCrimeAdapter.notifyItemChanged(mPosition);
         }
         upDateSubtitle();
@@ -99,7 +100,7 @@ public class CrimeListFragment extends Fragment {
             mCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_check_box);
         }
 
-        public void bind(final Crime crime) {
+        public void bind(Crime crime) {
             mCrime = crime;
             mTextView.setText(crime.getTitle());
             mDate.setText(crime.getDateString());
@@ -108,6 +109,7 @@ public class CrimeListFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mCrime.setSolved(isChecked);
+                    mCrimeLab.upDate(mCrime);
                 }
             });
         }
@@ -145,6 +147,10 @@ public class CrimeListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mCrimes.size();
+        }
+
+        public void setCrimes(List<Crime> crimes) {
+            mCrimes = crimes;
         }
     }
 
