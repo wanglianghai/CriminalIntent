@@ -23,6 +23,14 @@ public class CrimeListActivity extends SingleFragmentActivity {
         intent.putExtra(EXTRA_SUBTITLE, subtitle);
         return intent;
     }
+
+    @Override
+    protected int getLayoutResID() {
+      // return R.layout.activity_two_pan;
+        //用别名资源  ID依然是R.layout内部类
+        return R.layout.activity_master_detail;
+    }
+
     @Override
     public Fragment createFragment() {
         boolean click = false;
