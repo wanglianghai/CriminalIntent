@@ -39,6 +39,7 @@ public class CrimeListFragment extends Fragment{
 
     public interface Callbacks{
         void onCrimeSelected(Crime crime);
+        void updateSolve(Crime crime);
     }
 
     public static CrimeListFragment newInstance(boolean booleanClick) {
@@ -93,9 +94,10 @@ public class CrimeListFragment extends Fragment{
             mRecyclerView.setAdapter(mCrimeAdapter);
         } else {
             mCrimeAdapter.setCrimes(mCrimeLab.getCrimeList());
-            mCrimeAdapter.notifyItemChanged(mPosition);
-            //mPosition的值是不存在了？
-      //      mCrimeAdapter.notifyDataSetChanged(); 用这一切正常
+       //     mCrimeAdapter.notifyItemChanged(mPosition);
+            //mPosition的值是不存在了？资源回收了？在activity中的CrimeListFragment onPause()？
+      //     改进 mCrimeAdapter.notifyDataSetChanged(); 用这一切正常
+            mCrimeAdapter.notifyDataSetChanged();
         }
         upDateSubtitle();
         mBooleanClick = (boolean) getArguments().getSerializable(AGR_CRIME_SUBTITLE);
@@ -125,7 +127,8 @@ public class CrimeListFragment extends Fragment{
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mCrime.setSolved(isChecked);
-                    mCrimeLab.upDate(mCrime);
+                    CrimeLab.getCrimeLab(getActivity()).upDate(mCrime);
+                    mCallbacks.updateSolve(mCrime);
                 }
             });
         }
