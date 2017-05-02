@@ -20,6 +20,8 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     }
     //Fragment 多态
     public abstract Fragment createFragment();
+
+    protected void addMoreFragment() {}
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,5 +35,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
+        addMoreFragment();
+
     }
 }

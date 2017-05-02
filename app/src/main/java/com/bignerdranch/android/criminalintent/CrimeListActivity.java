@@ -56,6 +56,19 @@ public class CrimeListActivity extends SingleFragmentActivity
     }
 
     @Override
+    protected void addMoreFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragment_bottom);
+
+        if (fragment == null) {
+            fragment = new TreasureBottomFragment();
+            fm.beginTransaction()
+                    .add(R.id.fragment_bottom, fragment)
+                    .commit();
+        }
+    }
+
+    @Override
     public void onCrimeUpdate() {
         CrimeListFragment listFragment = (CrimeListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         listFragment.upDateUI();
