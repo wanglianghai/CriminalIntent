@@ -69,9 +69,6 @@ public class CrimeListFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
         mEmptyTextView = (TextView) view.findViewById(R.id.empty_crime);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_recycler_view);
-        if (mCrimeLab.getCrimeList().size() > 0) {
-            mEmptyTextView.setVisibility(View.GONE);
-        }
         upDateUI();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (savedInstanceState != null) {
@@ -87,6 +84,9 @@ public class CrimeListFragment extends Fragment{
     }
 
     public void upDateUI() {
+        if (mCrimeLab.getCrimeList().size() > 0) {
+            mEmptyTextView.setVisibility(View.GONE);
+        }
         //重新创建太浪费资源，有就直接更新
         if (mCrimeAdapter == null) {
             mCrimeAdapter = new CrimeAdapter(mCrimeLab.getCrimeList());
@@ -94,6 +94,8 @@ public class CrimeListFragment extends Fragment{
         } else {
             mCrimeAdapter.setCrimes(mCrimeLab.getCrimeList());
             mCrimeAdapter.notifyItemChanged(mPosition);
+            //mPosition的值是不存在了？
+      //      mCrimeAdapter.notifyDataSetChanged(); 用这一切正常
         }
         upDateSubtitle();
         mBooleanClick = (boolean) getArguments().getSerializable(AGR_CRIME_SUBTITLE);
@@ -159,6 +161,7 @@ public class CrimeListFragment extends Fragment{
 
         @Override
         public int getItemCount() {
+            mPosition = mCrimes.size();
             return mCrimes.size();
         }
 

@@ -57,6 +57,9 @@ public class CrimeListActivity extends SingleFragmentActivity
 
     @Override
     protected void addMoreFragment() {
+        if (findViewById(R.id.fragment_bottom) == null) {
+            return;
+        }
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_bottom);
 
