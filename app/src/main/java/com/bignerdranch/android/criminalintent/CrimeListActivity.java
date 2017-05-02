@@ -59,7 +59,10 @@ public class CrimeListActivity extends SingleFragmentActivity
     public void updateSolve(Crime crime) {
         CrimeFragment crimeFragment = (CrimeFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.detail_fragment_container);
-        crimeFragment.updateSolve();
+        if (crimeFragment == null) {
+            return;
+        }
+        crimeFragment.updateSolves(crime);
     }
 
     @Override
