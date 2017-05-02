@@ -161,7 +161,7 @@ public class CrimeFragment extends Fragment {
     }
 
     public void updateSolve() {
-        mSolveCheckBox.setChecked(mCrime.isSolved());
+        mSolveCheckBox.setChecked(CrimeLab.getCrimeLab(getActivity()).getCrime(mCrime.getId()).isSolved());
     }
 
     @Override
