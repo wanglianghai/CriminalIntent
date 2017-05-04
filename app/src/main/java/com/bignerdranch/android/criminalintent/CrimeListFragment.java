@@ -38,7 +38,7 @@ public class CrimeListFragment extends Fragment{
     private Callbacks mCallbacks;
 
     public interface Callbacks{
-        void onCrimeSelected(Crime crime);
+        void onCrimeSelected(Crime crime, boolean click);
         void updateSolve(Crime crime);
     }
 
@@ -87,6 +87,8 @@ public class CrimeListFragment extends Fragment{
     public void upDateUI() {
         if (mCrimeLab.getCrimeList().size() > 0) {
             mEmptyTextView.setVisibility(View.GONE);
+        } else {
+            mEmptyTextView.setVisibility(View.VISIBLE);
         }
         //重新创建太浪费资源，有就直接更新
         if (mCrimeAdapter == null) {
@@ -212,7 +214,7 @@ public class CrimeListFragment extends Fragment{
     }
 
     private void leapTo(Crime crime) {
-        mCallbacks.onCrimeSelected(crime);
+        mCallbacks.onCrimeSelected(crime, mBooleanClick);
     }
 
     @Override

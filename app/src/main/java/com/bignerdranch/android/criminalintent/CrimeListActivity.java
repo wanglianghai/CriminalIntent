@@ -42,12 +42,12 @@ public class CrimeListActivity extends SingleFragmentActivity
     }
 
     @Override
-    public void onCrimeSelected(Crime crime) {
+    public void onCrimeSelected(Crime crime, boolean click) {
         if (findViewById(R.id.detail_fragment_container) == null) {
-            Intent i = CriminalActivity.newIntent(this, crime.getId(), crime.isSolved());
+            Intent i = CriminalActivity.newIntent(this, crime.getId(), click);
             startActivity(i);
         } else {
-            Fragment newDetail = CrimeFragment.newInstance(crime.getId(), crime.isSolved());
+            Fragment newDetail = CrimeFragment.newInstance(crime.getId(), click);
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.detail_fragment_container, newDetail)

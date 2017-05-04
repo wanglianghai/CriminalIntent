@@ -206,9 +206,13 @@ public class CrimeFragment extends Fragment {
     }
 
     private void finish() {
-        boolean click = (boolean) getArguments().getSerializable(ARG_CRIME_SUBTITLE);
-        Intent intent = CrimeListActivity.newIntent(getActivity(), click);
-        startActivity(intent);
+        /*try {
+            boolean click = (boolean) getArguments().getSerializable(ARG_CRIME_SUBTITLE);
+            Intent intent = CrimeListActivity.newIntent(getActivity(), click);
+            startActivity(intent);
+        } finally {*/
+            getActivity().finish();
+      //  }
     }
 
 }
