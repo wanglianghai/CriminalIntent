@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme ">
         <activity android:name=".CrimeListActivity"
             android:label="@string/crime_list">
             <intent-filter>
