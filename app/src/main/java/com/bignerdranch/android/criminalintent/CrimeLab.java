@@ -66,7 +66,7 @@ public class CrimeLab {
 
     //context创建SQLite，需要对应的环境
     private CrimeLab(Context context) {
-        mDatabase = new TreasureBaseHelper(context.getApplicationContext()).getWritableDatabase();
+        mDatabase = new TreasureBaseHelper(context).getWritableDatabase();
 
     }
 

@@ -61,7 +61,7 @@ public class CrimeListFragment extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mCrimeLab = CrimeLab.getCrimeLab(getContext());
+        mCrimeLab = CrimeLab.getCrimeLab(getActivity().getApplicationContext());
     }
 
     @Nullable
@@ -129,7 +129,7 @@ public class CrimeListFragment extends Fragment{
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mCrime.setSolved(isChecked);
-                    CrimeLab.getCrimeLab(getActivity()).upDate(mCrime);
+                    CrimeLab.getCrimeLab(getActivity().getApplicationContext()).upDate(mCrime);
                     mCallbacks.updateSolve(mCrime);
                 }
             });

@@ -63,7 +63,7 @@ public class CrimeFragment extends Fragment {
         super.onCreate(savedInstanceState); //关闭时保存下来，重开时用保存的
         UUID uuid = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         //一串中（特定的）
-        mCrime = CrimeLab.getCrimeLab(getContext()).getCrime(uuid);
+        mCrime = CrimeLab.getCrimeLab(getActivity().getApplicationContext()).getCrime(uuid);
     }
 
     @Nullable
@@ -133,7 +133,7 @@ public class CrimeFragment extends Fragment {
         mButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CrimeLab crimeLab = CrimeLab.getCrimeLab(getContext());
+                CrimeLab crimeLab = CrimeLab.getCrimeLab(getActivity().getApplicationContext());
                 crimeLab.delete(mCrime);
                 finish();
             }
@@ -161,13 +161,13 @@ public class CrimeFragment extends Fragment {
     }
 
     public void updateSolves(Crime crime) {
-        mSolveCheckBox.setChecked(CrimeLab.getCrimeLab(getActivity()).getCrime(mCrime.getId()).isSolved());
+        mSolveCheckBox.setChecked(CrimeLab.getCrimeLab(getActivity().getApplicationContext()).getCrime(mCrime.getId()).isSolved());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        CrimeLab.getCrimeLab(getContext()).upDate(mCrime);
+        CrimeLab.getCrimeLab(getActivity().getApplicationContext()).upDate(mCrime);
     }
 
     @Override
@@ -191,7 +191,7 @@ public class CrimeFragment extends Fragment {
     }
 
     private void updateCrime() {
-        CrimeLab.getCrimeLab(getActivity()).upDate(mCrime);
+        CrimeLab.getCrimeLab(getActivity().getApplicationContext()).upDate(mCrime);
         mCallbacks.onCrimeUpdate();
     }
 
