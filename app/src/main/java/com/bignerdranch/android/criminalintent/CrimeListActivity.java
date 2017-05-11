@@ -3,10 +3,16 @@ package com.bignerdranch.android.criminalintent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
 
 /**
@@ -17,12 +23,55 @@ import android.view.Window;
 //大框架搭好后运行下
 public class CrimeListActivity extends SingleFragmentActivity
         implements CrimeListFragment.Callbacks, CrimeFragment.Callbacks  {
+    private static final String TAG = "CrimeListActivity";
     private static final String EXTRA_SUBTITLE = "crimeList.subtitle";
+    private ViewPager mViewPager;
+    private Fragment mBottomFragment;
+    private TreasureBottomFragment mTreasureBottomFragment;
 
     public static Intent newIntent(Context context, boolean subtitle) {
         Intent intent = new Intent(context, CrimeListActivity.class);
         intent.putExtra(EXTRA_SUBTITLE, subtitle);
         return intent;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mViewPager = (ViewPager) findViewById(R.id.fragment_container);
+
+        FragmentManager fm = getSupportFragmentManager();
+        mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
+            @Override
+            public Fragment getItem(int position) {
+                Log.i(TAG, "getItem: " + position);
+                switch (position) {
+                    case 0:
+                        mTreasureBottomFragment.updateUI(position);
+                        return createFragment();
+                    case 1:
+                        mTreasureBottomFragment.updateUI(position);
+                        return new PhotoFragment();
+                    case 2:
+                        mTreasureBottomFragment.updateUI(position);
+                        return new PhoneFragment();
+                    case 3:
+                        mTreasureBottomFragment.updateUI(position);
+                        return new PictureFragment();
+                    case 4:
+                        mTreasureBottomFragment.updateUI(position);
+                        return new ManFragment();
+                    default:
+                        return createFragment();
+                }
+            }
+
+            @Override
+            public int getCount() {
+                return 5;
+            }
+        });
     }
 
     @Override
@@ -67,16 +116,14 @@ public class CrimeListActivity extends SingleFragmentActivity
 
     @Override
     protected void addMoreFragment() {
-        if (findViewById(R.id.fragment_bottom) == null) {
-            return;
-        }
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_bottom);
+        mBottomFragment = fm.findFragmentById(R.id.fragment_bottom);
 
-        if (fragment == null) {
-            fragment = new TreasureBottomFragment();
+        if (mBottomFragment == null) {
+            mBottomFragment = new TreasureBottomFragment();
+            mTreasureBottomFragment = (TreasureBottomFragment) mBottomFragment;
             fm.beginTransaction()
-                    .add(R.id.fragment_bottom, fragment)
+                    .add(R.id.fragment_bottom, mBottomFragment)
                     .commit();
         }
     }
@@ -86,4 +133,5 @@ public class CrimeListActivity extends SingleFragmentActivity
         CrimeListFragment listFragment = (CrimeListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         listFragment.upDateUI();
     }
+
 }
