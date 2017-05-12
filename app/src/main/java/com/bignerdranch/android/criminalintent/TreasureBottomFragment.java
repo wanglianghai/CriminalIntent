@@ -1,8 +1,11 @@
 package com.bignerdranch.android.criminalintent;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,18 @@ public class TreasureBottomFragment extends Fragment {
     private Map<Integer, ImageView> mMapImageView;
     private Map<ImageView, Integer> mViewClicked;
     private Map<ImageView, Integer> mViewClick;
+    private Map<ImageView, Integer> mPosition;
+    private CallBacksB mCallBacksB;
+
+    public interface CallBacksB{
+        void update(int i);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallBacksB = (CallBacksB) context;
+    }
 
     @Nullable
     @Override
@@ -37,6 +52,7 @@ public class TreasureBottomFragment extends Fragment {
         mMapImageView = new HashMap<>();
         mViewClick = new HashMap<>();
         mViewClicked = new HashMap<>();
+        mPosition = new HashMap<>();
 
         mImageViewMan = (ImageView) v.findViewById(R.id.primary_image_man);
         mImageViewPicture = (ImageView) v.findViewById(R.id.primary_image_picture);
@@ -53,7 +69,22 @@ public class TreasureBottomFragment extends Fragment {
         setMapClick();
         setMapClicked();
         setMapImageView();
+        setMapPosition();
         return v;
+    }
+
+    private void setMapPosition() {
+        mPosition.put(mImageViewFile, 0);
+        mPosition.put(mImageViewPhoto, 1);
+        mPosition.put(mImageViewPhone, 2);
+        mPosition.put(mImageViewPicture, 3);
+        mPosition.put(mImageViewMan, 4);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBacksB = null;
     }
 
     private void setMapImageView() {
@@ -102,12 +133,23 @@ public class TreasureBottomFragment extends Fragment {
         for (ImageView i: mViewList) {
             if (i.equals(finalImage)) {
                 i.setImageResource(clicked);
+                mCallBacksB.update(mPosition.get(i));
             } else {
                 i.setImageResource(mViewClick.get(i));
             }
         }
     }
 
+  /*  private void imageSelect(ImageView finalImage, int clicked) {
+        for (int i = 0; i < 5; i++) {
+            if (mViewList.get(i).equals(finalImage)) {
+                mViewList.get(i).setImageResource(clicked);
+            } else {
+                mViewList.get(i).setImageResource(mViewClick.get(i));
+            }
+        }
+    }
+*/
 
     public void updateUI(int position){
         for (int i = 0; i < 5; i++) {

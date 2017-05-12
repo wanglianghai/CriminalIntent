@@ -23,7 +23,7 @@ import android.view.Window;
 //在manifest中配置
 //大框架搭好后运行下
 public class CrimeListActivity extends AppCompatActivity
-        implements CrimeListFragment.Callbacks, CrimeFragment.Callbacks {
+        implements CrimeListFragment.Callbacks, CrimeFragment.Callbacks, TreasureBottomFragment.CallBacksB {
     private static final String TAG = "CrimeListActivity";
     private static final String EXTRA_SUBTITLE = "crimeList.subtitle";
     private ViewPager mViewPager;
@@ -40,7 +40,7 @@ public class CrimeListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResID());
 
-        FragmentManager fm = getSupportFragmentManager();
+        final FragmentManager fm = getSupportFragmentManager();
         mBottomFragment = fm.findFragmentById(R.id.fragment_bottom);
 
         if (mBottomFragment == null) {
@@ -62,7 +62,9 @@ public class CrimeListActivity extends AppCompatActivity
                     case 0:
                         return createFragment();
                     case 1:
-                        return new PhotoFragment();
+                        PhotoFragment photoFragment = new PhotoFragment();
+                        ListFragments.get().add(photoFragment);
+                        return photoFragment;
                     case 2:
                         return new PhoneFragment();
                     case 3:
@@ -149,4 +151,8 @@ public class CrimeListActivity extends AppCompatActivity
         listFragment.upDateUI();
     }
 
+    @Override
+    public void update(int i) {
+        mViewPager.setCurrentItem(i);
+    }
 }
