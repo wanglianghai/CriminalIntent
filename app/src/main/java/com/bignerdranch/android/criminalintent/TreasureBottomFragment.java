@@ -48,6 +48,7 @@ public class TreasureBottomFragment extends Fragment {
         clickImage(v, mImageViewPhoto, R.drawable.ic_action_photo_click);
         clickImage(v, mImageViewFile, R.drawable.ic_action_file_click);
         clickImage(v, mImageViewPhone, R.drawable.ic_action_phone_click);
+        mImageViewFile.setImageResource(R.drawable.ic_action_file_click);
         setViewList();
         setMapClick();
         setMapClicked();

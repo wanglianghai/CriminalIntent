@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -21,8 +22,8 @@ import android.view.Window;
 //一个xml的布局可以被许多activity使用
 //在manifest中配置
 //大框架搭好后运行下
-public class CrimeListActivity extends SingleFragmentActivity
-        implements CrimeListFragment.Callbacks, CrimeFragment.Callbacks  {
+public class CrimeListActivity extends AppCompatActivity
+        implements CrimeListFragment.Callbacks, CrimeFragment.Callbacks {
     private static final String TAG = "CrimeListActivity";
     private static final String EXTRA_SUBTITLE = "crimeList.subtitle";
     private ViewPager mViewPager;
@@ -35,32 +36,38 @@ public class CrimeListActivity extends SingleFragmentActivity
         return intent;
     }
 
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mViewPager = (ViewPager) findViewById(R.id.fragment_container);
+        setContentView(getLayoutResID());
 
         FragmentManager fm = getSupportFragmentManager();
+        mBottomFragment = fm.findFragmentById(R.id.fragment_bottom);
+
+        if (mBottomFragment == null) {
+            mBottomFragment = new TreasureBottomFragment();
+            mTreasureBottomFragment = (TreasureBottomFragment) mBottomFragment;
+            Log.i(TAG, "addMoreFragment: " + 0);
+            fm.beginTransaction()
+                    .add(R.id.fragment_bottom, mBottomFragment)
+                    .commit();
+        }
+
+        mViewPager = (ViewPager) findViewById(R.id.fragment_container);
+        mViewPager.setOffscreenPageLimit(5);
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
             @Override
             public Fragment getItem(int position) {
-                Log.i(TAG, "getItem: " + position);
+
                 switch (position) {
                     case 0:
-                        mTreasureBottomFragment.updateUI(position);
                         return createFragment();
                     case 1:
-                        mTreasureBottomFragment.updateUI(position);
                         return new PhotoFragment();
                     case 2:
-                        mTreasureBottomFragment.updateUI(position);
                         return new PhoneFragment();
                     case 3:
-                        mTreasureBottomFragment.updateUI(position);
                         return new PictureFragment();
                     case 4:
-                        mTreasureBottomFragment.updateUI(position);
                         return new ManFragment();
                     default:
                         return createFragment();
@@ -72,16 +79,36 @@ public class CrimeListActivity extends SingleFragmentActivity
                 return 5;
             }
         });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mTreasureBottomFragment.updateUI(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: " + mViewPager.getCurrentItem());
+    }
+
     protected int getLayoutResID() {
       // return R.layout.activity_two_pan;
         //用别名资源  ID依然是R.layout内部类
         return R.layout.activity_master_detail;
     }
 
-    @Override
     public Fragment createFragment() {
         boolean click = false;
         if (getIntent().getSerializableExtra(EXTRA_SUBTITLE) != null) {
@@ -114,19 +141,7 @@ public class CrimeListActivity extends SingleFragmentActivity
         crimeFragment.updateSolves(crime);
     }
 
-    @Override
-    protected void addMoreFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        mBottomFragment = fm.findFragmentById(R.id.fragment_bottom);
 
-        if (mBottomFragment == null) {
-            mBottomFragment = new TreasureBottomFragment();
-            mTreasureBottomFragment = (TreasureBottomFragment) mBottomFragment;
-            fm.beginTransaction()
-                    .add(R.id.fragment_bottom, mBottomFragment)
-                    .commit();
-        }
-    }
 
     @Override
     public void onCrimeUpdate() {
